@@ -6,9 +6,12 @@ const app = express();
 const UserModel = require('./models/model');
 const routes = require('./routes/routes');
 const secureRoutes = require('./routes/secure-routes');
+const { MongoClient } = require('mongodb');
 
-mongoose.connect('mongodb://127.0.0.1:27017/passport', {
-    userNewUrlParser: true
+const URI = 'mongodb+srv://Juan:Juan1445$@cluster0-j2ivx.mongodb.net/test?retryWrites=true&w=majority';
+
+MongoClient.connect(URI, {
+    useNewUrlParser:true
 })
 .then(db => console.log("DB is connected"))
 .catch(err => console.error(err))
@@ -16,6 +19,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/passport', {
 require("./auth/auth");
 
 app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json());
 
 app.use('/', routes);
 

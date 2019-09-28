@@ -1,19 +1,22 @@
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 const UserModel = require('../models/model');
-const Jwtstrategy = require('passport-jwt').Strategy;
-const ExtractJWT = require('passport-jwt').ExtractJWt
+const jwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwT = require('passport-jwt').ExtractJwt
+const opts = {};
 
-passport.use(new Jwtstrategy)({
-    secretOrKey: "top_secret",
-    jwtFromRequest: ExtractJWT.fromUrlQueryParameter('secrect_token')
-}, async (token, done) =>{
-    try{
-        return done(null,token,user);
-    }catch(error){
-        done(error);
+opts.secretOrKey = "top_secret";
+opts.jwtFromRequest = ExtractJwT.fromUrlQueryParameter('secrect_token');
+
+passport.use(new jwtStrategy(opts,()=>{
+    async (token, done) =>{
+        try{
+            return done(null,token,user);
+        }catch(error){
+            done(error);
+        }
     }
-});
+}))
 
 passport.use('signup', new localStrategy({
     // estos parametros ya los trae passport, ya estan definidos
